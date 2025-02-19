@@ -11,6 +11,8 @@
 
 # SSL configuration:
 
+(For security reasons, certificate.pem & private-key.pem files were not uploaded to the project's github page)
+
 1. Ensure that you have OpenSSL installed. Either download it or use a package manager like Homebrew on macOS:
    brew install openssl or use Chocolatey for Windows: choco install openssl -y
 

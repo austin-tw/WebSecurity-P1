@@ -40,11 +40,17 @@
 I chose OpenSSL instead of Let's Encrypt because it's easier to setup with just Gitbash and vscode studio.
 
 For security headers, I use the default settings of Helmet:
+
 X-DNS-Prefetch-Control: which disables DNS prefetching.
+
 X-Frame-Options: which protects against clickjacking.
+
 X-Content-Type-Options: which Prevents MIME-sniffing.
+
 Strict-Transport-Security (HSTS): which forces HTTPS.
+
 X-Permitted-Cross-Domain-Policies: which blocks Flash and PDF cross-domain requests.
+
 Referrer-Policy: which sets the referrer policy to no-referrer.
 
 # Caching strategies:

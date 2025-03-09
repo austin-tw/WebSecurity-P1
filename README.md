@@ -1,12 +1,12 @@
 # Setup instructions:
 
-1. Create a package.json file: npm init -y
-2. Install required packages: npm install express https fs hsts
+1. Create a package.json file: `npm init -y`
+2. Install required packages: `npm install express https fs hsts`
 3. Create a server.js file which contain the main codes of your server
 4. Create a self-signed certificate & private key by using OpenSSL
 5. Update the paths to private-key.pem and certificate.pem in your server.js file
-6. Install Helmet for security headers: npm install express helmet
-7. Run the node server: node server.js
+6. Install Helmet for security headers: `npm install express helmet`
+7. Run the node server: `node server.js`
 8. Open your browser and go to http://localhost:3000/
 
 # SSL configuration:
@@ -14,15 +14,17 @@
 (For security reasons, certificate.pem & private-key.pem files were not uploaded to the project's github page)
 
 1. Ensure that you have OpenSSL installed. Either download it or use a package manager like Homebrew on macOS:
-   brew install openssl or use Chocolatey for Windows: choco install openssl -y
+   brew install openssl or use Chocolatey for Windows: `choco install openssl -y`
 
 2. Run the following command to generate a private key:
-   openssl genrsa -out private-key.pem 2048
+   `openssl genrsa -out private-key.pem 2048`
 
 3. Generate a self-signed certificate:
-   openssl req -new -x509 -key private-key.pem -out certificate.pem -days 365
+   `openssl req -new -x509 -key private-key.pem -out certificate.pem -days 365`
 
 4. When prompted for details, fill accordingly. Make sure to set Common Name (CN) to localhost for local testing. For example:
+
+   ```
    Country Name (2 letter code) [AU]:CA
    State or Province Name (full name) [Some-State]:Alberta
    Locality Name (eg, city) []:Calgary
@@ -30,12 +32,15 @@
    Organizational Unit Name (eg, section) []:IT Department
    Common Name (e.g. server FQDN or YOUR name) []:localhost
    Email Address []:your-email@example.com
+   ```
 
 5. Update the paths to private-key.pem and certificate.pem in your server.js file. If located in the project root, use:
+   ```
    const options = {
    key: fs.readFileSync('private-key.pem'), // Update this path
    cert: fs.readFileSync('certificate.pem'), // Update this path
    };
+   ```
 
 I chose OpenSSL instead of Let's Encrypt because it's easier to setup with just Gitbash and vscode studio.
 
@@ -58,6 +63,8 @@ Referrer-Policy: which sets the referrer policy to no-referrer.
 I only have caching strategies for my GET routes. My POST and PUT routes do not have cache control, because they are used to modify data, so not too much sense in caching them.
 
 My GET routes:
+
+```
 app.get("/", cacheMiddleware, (req, res) => {
 res.send("Hello from the Wellness App!");
 });
@@ -70,6 +77,7 @@ app.get("/goals/:id", cacheMiddleware, (req, res) => {
 const goalId = req.params.id;
 res.send(`Showing steps for goal No.${goalId}`);
 });
+```
 
 As instructed by the assignment, the GET routes will Cache for 5 minutes with stale-while-revalidate option (I set it to 6min). While the GET route for user-profile has no cache to protect sensitive user data. This caching strategy will ease the load on the server by having the cache content considered fresh for 5min, where clients serve the cached response without checking with the server. Then after 5 minutes, the cached content becomes stale, for the next 6min, if a client request the content, the cache could provide the stale content, but in parallel, the cache initiates a background request to the server to fetch an updated version.
 

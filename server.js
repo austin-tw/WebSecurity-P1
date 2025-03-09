@@ -29,28 +29,28 @@ app.get("/", cacheMiddleware, (req, res) => {
   res.send("Hello from the Wellness App!");
 });
 
-app.get("/goals", cacheMiddleware, (req, res) => {
+app.get("api/goals", cacheMiddleware, (req, res) => {
   res.send("Showing wellness goals");
 });
 
-app.get("/goals/:id", cacheMiddleware, (req, res) => {
+app.get("api/goals/:id", cacheMiddleware, (req, res) => {
   const goalId = req.params.id;
   res.send(`Showing steps for goal No.${goalId}`);
 });
 
 // Sensitive user profile endpoint (no cache to protect sensitive user data)
-app.get("/user-profile", (req, res) => {
+app.get("api/user-profile", (req, res) => {
   res.set("Cache-Control", "no-store");
   res.send({ username: "Austin Lin", phone: "825-754-7566" });
 });
 
 // !! my POST and PUT routes do not have cache control, because they are to modify data, so not too much sense to cache them
-app.post("/goals", (req, res) => {
+app.post("api/goals", (req, res) => {
   const newGoal = req.body;
   res.send(`Added new goal: ${JSON.stringify(newGoal)}`);
 });
 
-app.put("/goals/:id/finish", (req, res) => {
+app.put("api/goals/:id/finish", (req, res) => {
   const goalId = req.params.id;
   res.send(`Goal No.${goalId} finished, awesome!`);
 });
